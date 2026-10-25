@@ -114,14 +114,18 @@ export function ProjectPanel() {
             </div>
             {marketDeployed ? (
               <>
-                <p className="small-note">USDC software-license marketplace. Verified in this session from the runtime registry.</p>
+                <p className="small-note">USDC software-license marketplace. Known deployment — address seeded from independently verified RPC checks (2026-10-25). The marketplace panel re-verifies the runtime before any read or payment.</p>
                 {mainnetMarkets.map(d => (
                   <dl className="deploy-facts" key={d.key}>
                     <dt>Contract</dt>
                     <dd className="mono break-all">
                       <ExplorerLink chain="mainnet" path={`/address/${d.address}`} label={d.address} />
                     </dd>
-                    <dt>Label</dt><dd>{d.label}</dd>
+                    <dt>Deploy tx</dt>
+                    <dd className="mono break-all">
+                      <ExplorerLink chain="mainnet" path="/tx/0x364b873f903d473cf45d2b3342a14690a1be72533ca548235fdde71a92d69cf6" label="0x364b873f…69cf6" />
+                      <span className="small-note" style={{ marginLeft: 8 }}>(deployment gas only — not a USDC purchase)</span>
+                    </dd>
                   </dl>
                 ))}
               </>

@@ -50,13 +50,13 @@ details[open]>summary { margin-bottom:8px; }
 .wallet-balance { font-size:11px; color:var(--muted); }
 .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 16px; min-height:40px; border:0; border-radius:10px; background:var(--surface-strong); color:var(--ink-2); font-size:13px; line-height:1.4; font-weight:600; }
 .btn:hover:not(:disabled) { background:#e5e9ee; }
-.btn-primary { color:#fff; background:var(--accent); }
-.btn-primary:hover:not(:disabled) { background:var(--accent-hover); }
+.btn-primary { color:#fff; background:var(--accent-hover); }
+.btn-primary:hover:not(:disabled) { background:#1558c0; }
 .btn-soft { color:var(--accent); background:var(--accent-dim); }
 .btn-soft:hover:not(:disabled) { background:#e0ecff; }
 .btn-quiet { background:transparent; color:var(--muted); }
-.btn-wallet { background:var(--accent); color:white; font-size:12px; padding:11px 17px; }
-.btn-wallet:hover:not(:disabled) { background:var(--accent-hover); }
+.btn-wallet { background:var(--accent-hover); color:white; font-size:12px; padding:11px 17px; }
+.btn-wallet:hover:not(:disabled) { background:#1558c0; }
 .workspace-content { max-width:1320px; margin:0 auto; padding:34px 32px 40px; }
 .lab-heading,.page-intro { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:24px; }
 .lab-heading h1,.page-heading,.page-intro h1 { font-family:inherit; font-size:28px; font-weight:700; letter-spacing:-.035em; line-height:1.3; }
@@ -256,6 +256,12 @@ details[open]>summary { margin-bottom:8px; }
 .starter-card-bottom>span { font-size:12px; color:var(--muted); }
 .starter-card-bottom b { color:var(--ink-2); margin-left:5px; font-weight:600; }
 .starter-card-bottom button { font-size:13px; font-weight:600; display:flex; align-items:center; gap:5px; color:var(--accent); padding:7px 0 7px 7px; }
+/* Restore correct colours for full-weight buttons inside starter-card-bottom. The rule above
+   would override .btn-primary (white text, blue bg) and .btn-soft via specificity otherwise. */
+.starter-card-bottom button.btn-primary { color:#fff; background:var(--accent-hover); padding:8px 14px; }
+.starter-card-bottom button.btn-primary:hover:not(:disabled) { background:#1558c0; }
+.starter-card-bottom button.btn-primary svg { color:#fff; }
+.starter-card-bottom button.btn-soft { color:var(--accent); background:var(--accent-dim); padding:8px 14px; }
 .market-opening { display:flex; align-items:center; gap:18px; background:#eef3fa; border-radius:18px; padding:28px; }
 .market-opening-icon { color:#6683a6; padding:16px; border-radius:16px; background:#e2ebf7; }
 .market-opening h2 { font-size:17px; font-weight:650; letter-spacing:-.2px; }

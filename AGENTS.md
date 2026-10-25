@@ -28,7 +28,7 @@ Public buyer links (?chain=&market=&listing=&tx=) are candidates, never authorit
 
 PUBLIC TESTNET EXPERIMENT (Arc Testnet 5042002 — NOT mainnet): vault 0x36920c4ddaee26ec039a653ec78520c4b27a64e3, deployment tx 0x0101cfd53bb2469150387f5d3c37483fe57e16f7fa84f8d6f7a923f1cb706358, funding 10 test USDC tx 0xe26781c2f75f76fe12f981ccfed4c35ddddbe0986c2d3d5701bc1effb63f8dd3. Completed run: automatic buy 0xb99bf6414ed9475fe3d020a2c7b042a614aba3cff7f15b7aaf184c2ad3143a81; automatic sell 0xf35f115eb8677adb4a5b6d6525e955c3967fbfe882f0dd8d86c9af3320e0fd47; close/recovery 0xa9b68258db0a2a110dad17a1fb3f16c6061e3f9abecb8d4e29109eca59d16102. Two Fill events matched sequence 2, no virtual BTC remained, and the vault was closed. Owner/session keys existed only in the now-exited Node process. Do not claim these test assets are recoverable by a user wallet or re-run this experiment automatically. Public evidence is in release-review/public-testnet/run.json (local parent workspace). The browser viewer can read ?experiment=0x36920c4ddaee26ec039a653ec78520c4b27a64e3 without a signer. Simulated realized result was -0.003968 test USDC before actual network gas; this was execution verification, not a profitable-strategy claim.
 
-No mainnet marketplace deployment exists yet. No verified mainnet deployment address has been registered. Human must deploy StrategyLicenseMarket on Arc mainnet (or testnet) and call registerVerifiedMarket with the resulting address before any marketplace payment buttons appear.
+MAINNET CONTRACT DEPLOYED (2026-10-25): StrategyLicenseMarket at 0xEB55Dca755E186C24Ee42cd1d3D315D3Cc602A4d on Arc mainnet (chain 5042). Deploy tx 0x364b873f903d473cf45d2b3342a14690a1be72533ca548235fdde71a92d69cf6 (deployment gas only — NOT a USDC license purchase). Independently verified via RPC: expectedChainId()=5042, USDC()=0x3600000000000000000000000000000000000000, USDC_DECIMALS()=6, keccak256(eth_getCode) matches compiled artifact 0x4a9ce64c…. Address seeded in LICENSE_MARKET_DEPLOYMENTS; marketplace panel re-verifies runtime before any read or payment. MAINNET USDC PURCHASE: not yet completed. ExperimentRegistry: not deployed on any chain.
 
 ## Tech Stack
 
@@ -55,6 +55,14 @@ Netlify deployment adapter: netlify.toml and netlify/functions/evidence.mjs use 
 - `src/trading/` - paper ledger, historical backtests, live execution guards and transparent forward-report exports
 
 ## Reviewed Checks
+
+Current status (2026-10-25 end of day):
+- Public frontend live at https://earnest-kleicha-68d9e5.netlify.app (static; Netlify Functions/evidence API pending Git-connected build)
+- StrategyLicenseMarket deployed on Arc mainnet at 0xEB55Dca755E186C24Ee42cd1d3D315D3Cc602A4d (deploy tx 0x364b873f…69cf6; gas only, not a USDC purchase)
+- GitHub repo public at https://github.com/openai-lover/arc-tradelab (commit 32028a6, source pushed 2026-10-25)
+- PUBLIC_APP_ORIGIN configured in Netlify UI; GitHub→Netlify authorization still pending
+- Mainnet USDC license purchase: NOT yet completed
+- CSS defect fixed: .starter-card-bottom button was overriding .btn-primary colour (blue-on-blue); fixed with explicit .btn-primary override rule
 
 Verified in Arc Studio (2026-10-25, final QA corrections pass):
 - tradelab-user-logo.webp c22c0fcb… confirmed installed (155024 bytes, VP8L lossless)
@@ -91,7 +99,7 @@ Lint: 3 warnings total — 2 pre-existing `engine.test.ts` unused vars, 1 `parse
 
 `compiled.json` `sourceSha256` values match current `.sol` sources. Contracts not changed; compiler runtime commitments not regenerated.
 
-These are not onchain performance results or an external audit. No mainnet contracts are deployed.
+These are not onchain performance results or an external audit. See MAINNET CONTRACT DEPLOYED note above for current deployment status.
 
 ## To Run
 

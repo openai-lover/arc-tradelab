@@ -186,6 +186,42 @@ export async function registerVerifiedMarket(chainId: LicenseMarketChainId, cand
   return deployment
 }
 
+/**
+ * Pure candidate-address selector with explicit precedence:
+ *   1. Shared-URL candidate (highest trust for user intent; still RPC-verified by caller)
+ *   2. localStorage candidate for the chain
+ *   3. Address from the first seeded LICENSE_MARKET_DEPLOYMENTS entry for the chain (fallback)
+ *   4. undefined — no candidate available
+ *
+ * Never treats the result as verified. The caller must pass it through registerVerifiedMarket
+ * (full RPC exact-runtime check) before using it. A bad shared candidate is returned as-is so
+ * the caller can fail closed (registerVerifiedMarket throws on mismatch).
+ *
+ * @param chainId  The chain to resolve for.
+ * @param sharedMarket  Raw address string from the shared URL query param (may be invalid).
+ * @param getStorage  Reads localStorage; inject a stub in tests.
+ * @param deployments  Current LICENSE_MARKET_DEPLOYMENTS slice; defaults to module-level array.
+ */
+export function resolveMarketCandidate(
+  chainId: LicenseMarketChainId,
+  sharedMarket: string | undefined,
+  getStorage: (key: string) => string | null,
+  deployments: readonly LicenseMarketDeployment[] = LICENSE_MARKET_DEPLOYMENTS,
+): string | undefined {
+  // 1. Shared URL wins outright.
+  if (sharedMarket !== undefined && sharedMarket !== '') return sharedMarket
+  // 2. localStorage saved candidate.
+  try {
+    const saved = getStorage(`tradelab_market_candidate_${chainId}`)
+    if (saved) return saved
+  } catch { /* Storage unavailable (e.g. private mode deny). */ }
+  // 3. Seeded known deployment for this chain.
+  const seeded = deployments.find(d => d.chainId === chainId)
+  if (seeded) return seeded.address
+  // 4. No candidate.
+  return undefined
+}
+
 export function requireLicenseDeployment(key?: string): LicenseMarketDeployment {
   const registered = LICENSE_MARKET_DEPLOYMENTS.find(deployment => deployment.key === key)
   if (!registered) throw new Error('No reviewed marketplace deployment is registered. Wallet transactions are unavailable.')

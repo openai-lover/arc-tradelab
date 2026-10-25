@@ -8,7 +8,7 @@ import { WalletButton } from './WalletButton'
 import { preparePublication, importPublicationBundle, exportPublicationBundle } from '../marketplace/publication'
 import type { PreparedPublication } from '../marketplace/publication'
 import { downloadEvidence } from '../marketplace/evidenceDownload'
-import { LICENSE_MARKET_DEPLOYMENTS, LICENSE_MARKET_ABI, registerVerifiedMarket } from '../marketplace/licenseMarket'
+import { LICENSE_MARKET_DEPLOYMENTS, LICENSE_MARKET_ABI, registerVerifiedMarket, resolveMarketCandidate } from '../marketplace/licenseMarket'
 import { ContractDeployment } from './ContractDeployment'
 import { rpc, verifyContract, checkedWallet } from '../onchain/contracts'
 import { publishEvidence } from '../marketplace/publishEvidence'
@@ -75,6 +75,7 @@ export function MarketplacePanel({ draft, onBackToLab, onImport, onTryTemplate }
   const [reportURI, setReportURI] = useState('')
   const [error, setError] = useState(shared.error)
   const [busy, setBusy] = useState(false)
+  const [checkingSeeded, setCheckingSeeded] = useState(false)
   const lock = useRef(false)
   const revision = useRef(0)
   const { address, chainId, isConnected, connector } = useAccount()
@@ -110,15 +111,23 @@ export function MarketplacePanel({ draft, onBackToLab, onImport, onTryTemplate }
   useEffect(() => {
     let cancelled = false
     if (shared.error) return
-    let candidate = shared.selection?.market as string | undefined
     const initialChain = shared.selection?.chainId ?? 5042
-    try { candidate ??= localStorage.getItem(`tradelab_market_candidate_${initialChain}`) ?? undefined } catch { /* Public link works without storage. */ }
+    const candidate = resolveMarketCandidate(
+      initialChain,
+      shared.selection?.market as string | undefined,
+      key => { try { return localStorage.getItem(key) } catch { return null } },
+    )
     if (!candidate) return
-    void Promise.resolve().then(() => registerVerifiedMarket(initialChain, getAddress(candidate!))).then(item => {
-      if (!cancelled) setDeploymentKey(item.key)
-    }).catch(e => { if (!cancelled) marketError(e) })
+    // Show a checking indicator only when falling back to a seeded address (no shared URL and no
+    // localStorage entry) so fresh visitors know the marketplace is being verified, not just inactive.
+    const isSeededFallback = !shared.selection?.market && !(() => { try { return localStorage.getItem(`tradelab_market_candidate_${initialChain}`) } catch { return null } })()
+    if (isSeededFallback) setCheckingSeeded(true)
+    void Promise.resolve()
+      .then(() => registerVerifiedMarket(initialChain, getAddress(candidate)))
+      .then(item => { if (!cancelled) { setDeploymentKey(item.key); setCheckingSeeded(false) } })
+      .catch(e => { if (!cancelled) { setCheckingSeeded(false); marketError(e) } })
     return () => { cancelled = true }
-  }, [shared]) // One read-only initial candidate; never opens a wallet.
+  }, [shared]) // One read-only initial candidate resolution; never opens a wallet.
   const autoRead = useRef('')
   useEffect(() => {
     if (!deployment || !shared.selection?.listingId || !requestedListingId) return
@@ -168,6 +177,7 @@ export function MarketplacePanel({ draft, onBackToLab, onImport, onTryTemplate }
   return <div className="space-y-5">
 <section className="page-intro"><div><h1>Find your next trading bot</h1><p className="intro-description">Inspect the results. Buy the exact version.</p></div><button className="btn btn-quiet" aria-expanded={setupOpen} onClick={() => setSetupOpen(v => !v)}><Settings2 size={15} />Marketplace setup</button></section>
     {shared.selection && !deployment && !error && <p role="status" className="notice">Checking this marketplace against the reviewed contract…</p>}
+    {checkingSeeded && !deployment && !error && <p role="status" className="notice">Verifying known marketplace on Arc mainnet…</p>}
     <details className="panel panel-padding market-setup" open={setupOpen} onToggle={e => setSetupOpen(e.currentTarget.open)} hidden={!setupOpen}><summary>{deployment ? 'Network & contract' : 'Activate the marketplace'}</summary><div className="space-y-3 mt-3">
       <label className="text-sm">Network <select aria-label="Marketplace setup network" value={setupChain} onChange={e => setSetupChain(Number(e.target.value) as 5042 | 5042002)}><option value={5042002}>Arc Testnet · rehearse first</option><option value={5042}>Arc mainnet · real USDC</option></select></label>
       <ContractDeployment key={setupChain} kind="StrategyLicenseMarket" chainId={setupChain} args={[BigInt(setupChain)]} onVerified={async address => {

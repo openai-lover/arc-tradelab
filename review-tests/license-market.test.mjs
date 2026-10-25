@@ -6,7 +6,7 @@ import {
   assertConfirmedLicenseApproval, assertConfirmedLicensePurchase, assertLicenseBuyable, assertLicenseHash, assertLicensePrice,
   assertLicenseURI, assertListingId, assertWalletContext, createdLicenseListingId,
   formatLicensePrice, licenseTransactionUrl, parseLicensePrice, readVerifiedLicenseMarket,
-  requireLicenseDeployment, validateCreateListing, validateLicenseDeployment,
+  requireLicenseDeployment, validateCreateListing, validateLicenseDeployment, resolveMarketCandidate,
 } from '../src/marketplace/licenseMarket.ts'
 
 const hash = byte => `0x${byte.repeat(64)}`
@@ -84,11 +84,16 @@ function listingLog(overrides = {}, address = marketAddress) {
 }
 
 test('unregistered arbitrary contract addresses cannot enable wallet transactions', () => {
-  assert.equal(LICENSE_MARKET_DEPLOYMENTS.length, 0)
+  // LICENSE_MARKET_DEPLOYMENTS is seeded with the verified Arc mainnet deployment.
+  assert.ok(LICENSE_MARKET_DEPLOYMENTS.length >= 1, 'Seeded deployments should be present')
   assert.ok(Object.isFrozen(LICENSE_MARKET_DEPLOYMENTS))
+  // Keys that don't match any seeded entry must still throw.
   for (const key of [undefined, '', 'reviewed-rehearsal', marketAddress, 'https://example.com']) {
     assert.throws(() => requireLicenseDeployment(key), /No reviewed marketplace deployment/)
   }
+  // The seeded mainnet key must resolve without throwing.
+  const seeded = LICENSE_MARKET_DEPLOYMENTS[0]
+  assert.doesNotThrow(() => requireLicenseDeployment(seeded.key))
   for (const changed of [
     { chainId: 1 }, { address: ARC_USDC_ADDRESS }, { address: '0x0000000000000000000000000000000000000000' },
     { address: 'bad' }, { runtimeCodeHash: hash('0') }, { sourceSha256: '0x12' }, { key: '../../untrusted' },
@@ -258,4 +263,67 @@ test('transaction links are chain-specific and require a valid transaction hash'
   assert.equal(licenseTransactionUrl(5042002, hash('a')), `https://explorer.testnet.arc.io/tx/${hash('a')}`)
   assert.equal(licenseTransactionUrl(5042, hash('a')), `https://explorer.arc.io/tx/${hash('a')}`)
   assert.throws(() => licenseTransactionUrl(5042, '0x1234'))
+})
+
+// ── resolveMarketCandidate precedence tests ────────────────────────────────
+// These exercise the pure selector without React, RPC, or DOM.
+const seededMainnet = {
+  key: 'arc-5042-seeded', label: 'Arc mainnet seeded', chainId: 5042,
+  address: '0xEB55Dca755E186C24Ee42cd1d3D315D3Cc602A4d',
+  runtimeCodeHash: hash('c'), sourceSha256: hash('d'),
+}
+const seededTestnet = {
+  key: 'arc-5042002-seeded', label: 'Arc Testnet seeded', chainId: 5042002,
+  address: '0xAAAA000000000000000000000000000000000001',
+  runtimeCodeHash: hash('e'), sourceSha256: hash('f'),
+}
+const noStorage = () => null
+
+test('resolveMarketCandidate: shared URL address wins over localStorage and seed', () => {
+  const sharedAddr = '0xBBBB000000000000000000000000000000000002'
+  const storedAddr = '0xCCCC000000000000000000000000000000000003'
+  const result = resolveMarketCandidate(5042, sharedAddr, () => storedAddr, [seededMainnet])
+  assert.equal(result, sharedAddr, 'Shared URL must win')
+})
+
+test('resolveMarketCandidate: localStorage candidate wins over seed when no shared URL', () => {
+  const storedAddr = '0xDDDD000000000000000000000000000000000004'
+  const result = resolveMarketCandidate(5042, undefined, key => key.includes('5042') ? storedAddr : null, [seededMainnet])
+  assert.equal(result, storedAddr, 'localStorage must win over seed')
+})
+
+test('resolveMarketCandidate: seeded deployment is used when no shared URL and no localStorage', () => {
+  const result = resolveMarketCandidate(5042, undefined, noStorage, [seededMainnet, seededTestnet])
+  assert.equal(result, seededMainnet.address, 'Seeded mainnet address must be returned')
+})
+
+test('resolveMarketCandidate: correct chain selected from mixed seed array', () => {
+  const result = resolveMarketCandidate(5042002, undefined, noStorage, [seededMainnet, seededTestnet])
+  assert.equal(result, seededTestnet.address, 'Seeded testnet address must be returned for chain 5042002')
+})
+
+test('resolveMarketCandidate: returns undefined when no shared URL, no storage, and no matching seed', () => {
+  const result = resolveMarketCandidate(5042, undefined, noStorage, [seededTestnet])
+  assert.equal(result, undefined, 'No candidate should yield undefined')
+  const resultEmpty = resolveMarketCandidate(5042, undefined, noStorage, [])
+  assert.equal(resultEmpty, undefined, 'Empty seed array should yield undefined')
+})
+
+test('resolveMarketCandidate: bad shared URL address is returned as-is for fail-closed handling by caller', () => {
+  // Caller (registerVerifiedMarket via getAddress) will throw on a bad address; the selector must
+  // not throw itself so the caller can produce the right error.
+  const badAddr = 'not-an-address'
+  const result = resolveMarketCandidate(5042, badAddr, noStorage, [seededMainnet])
+  assert.equal(result, badAddr, 'Bad shared address must be passed through for caller to reject')
+})
+
+test('resolveMarketCandidate: empty string shared URL is treated as absent, falls through to storage/seed', () => {
+  const result = resolveMarketCandidate(5042, '', noStorage, [seededMainnet])
+  assert.equal(result, seededMainnet.address, 'Empty string shared address must not win over seed')
+})
+
+test('resolveMarketCandidate: storage error is swallowed and seed fallback is used', () => {
+  const throwingStorage = () => { throw new Error('SecurityError: Blocked') }
+  const result = resolveMarketCandidate(5042, undefined, throwingStorage, [seededMainnet])
+  assert.equal(result, seededMainnet.address, 'Storage error must not propagate; seed fallback must apply')
 })
