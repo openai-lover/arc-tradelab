@@ -205,12 +205,11 @@ export function ProjectPanel() {
       <Section title="Development history" icon={<Terminal size={16} />}>
         <div className="space-y-3 text-sm" style={{ color: 'var(--ink-2)', lineHeight: 1.75 }}>
           <p>
-            The frontend (Vite + React + TypeScript) and all onchain integration logic were built
-            in Arc Studio over multiple sessions. Contract sources were initially drafted locally
-            with Codex assistance, then integrated into this Arc Studio project, reviewed, and
-            tested here using Foundry. The marketplace contract integration, evidence pipeline,
-            purchase-proof verification, Netlify Blobs adapter, and review test suite were written
-            and run in Arc Studio.
+            The frontend (Vite + React + TypeScript) was developed in Arc Studio. Contract sources
+            were initially drafted locally with Codex assistance, then integrated into this Arc
+            Studio project, where they were reviewed, refined, and tested using Foundry. The
+            marketplace contract integration, evidence pipeline, purchase-proof verification,
+            Netlify Blobs adapter, and review test suite were developed and run in Arc Studio.
           </p>
           <p>
             The public Arc Testnet end-to-end run (vault deploy → fund → automatic buy → automatic
@@ -273,11 +272,13 @@ export function ProjectPanel() {
             <code>PUBLIC_APP_ORIGIN</code> set has not been verified. Evidence bundles can be
             downloaded and shared manually in the interim.
           </li>
-          <li>
-            <strong>No mainnet marketplace.</strong>{' '}
-            StrategyLicenseMarket must be deployed by a human wallet owner before any purchase
-            flow is accessible.
-          </li>
+          {!marketDeployed && (
+            <li>
+              <strong>No mainnet marketplace.</strong>{' '}
+              StrategyLicenseMarket must be deployed by a human wallet owner before any purchase
+              flow is accessible.
+            </li>
+          )}
           <li>
             <strong>No background worker.</strong> The app only runs while the browser tab is open.
           </li>
@@ -292,10 +293,10 @@ export function ProjectPanel() {
             { done: true,  text: 'Working frontend app with wallet-free backtest and marketplace UI' },
             { done: true,  text: 'Arc Testnet deployment + full onchain run (buy, sell, close)' },
             { done: true,  text: 'Original brand images installed (tradelab-hero.webp, strategy-objects.webp)' },
-            { done: marketDeployed,       text: 'StrategyLicenseMarket deployed on Arc mainnet (human wallet required)' },
+            { done: marketDeployed,       text: 'StrategyLicenseMarket deployed on Arc mainnet — 0xEB55Dca755E186C24Ee42cd1d3D315D3Cc602A4d (verified 2026-10-25)' },
             { done: mainnetPurchaseProven, text: 'Mainnet USDC purchase: verified buyer→seller Transfer + LicensePurchased event on Arc mainnet (chain 5042)' },
             { done: true,  text: 'Public GitHub repository: github.com/openai-lover/arc-tradelab — published 2026-10-25, commit ec9188f' },
-            { done: false, text: 'Live public URL (Netlify/HF deployment; no account connected)' },
+            { done: true,  text: 'Live public URL: earnest-kleicha-68d9e5.netlify.app' },
             { done: false, text: 'Video showing Arc Studio and mainnet transaction' },
             { done: true,  text: 'Public builder profile: github.com/openai-lover' },
             { done: false, text: 'Evidence hosting verified on Netlify (PUBLIC_APP_ORIGIN required)' },

@@ -13,13 +13,24 @@ export function ContractDeployment({ kind, chainId, args, onVerified }: {
   const account = useAccount(); const { switchChain } = useSwitchChain()
   const lock = useRef(false)
   const [busy, setBusy] = useState(false); const [error, setError] = useState('')
-  const [hash, setHash] = useState<Hash | null>(null)
-  const [candidate, setCandidate] = useState(() => {
+  // Load both address and tx hash from the persisted receipt so the explorer link
+  // survives HMR, page refresh, and re-mount. Never trust the address without a
+  // subsequent verifyContract call (done in the "Verify & use" path below).
+  const [savedReceipt] = useState<{ address: string; hash: Hash } | null>(() => {
     try {
       const value: unknown = JSON.parse(localStorage.getItem(`tradelab_deployment_receipt_${kind}_${chainId}`) ?? 'null')
-      return value && typeof value === 'object' && 'address' in value && typeof value.address === 'string' ? value.address : ''
-    } catch { return '' }
+      if (value && typeof value === 'object' && 'address' in value && 'hash' in value
+          && typeof value.address === 'string' && typeof value.hash === 'string') {
+        return { address: value.address, hash: value.hash as Hash }
+      }
+    } catch { /* ignore */ }
+    return null
   })
+  const [hash, setHash] = useState<Hash | null>(() => savedReceipt?.hash ?? null)
+  const [candidate, setCandidate] = useState(() => savedReceipt?.address ?? '')
+  // True only after this session has confirmed the saved receipt: tx success + contractAddress
+  // matches saved address + runtime bytecode verified. Never set from localStorage alone.
+  const [savedReceiptVerified, setSavedReceiptVerified] = useState(false)
   const [ack, setAck] = useState(false)
   const [review, setReview] = useState<{
     data: Hex; owner: Address; gas: bigint
@@ -133,6 +144,7 @@ export function ContractDeployment({ kind, chainId, args, onVerified }: {
                   JSON.stringify({ address: receipt.contractAddress, hash: tx }),
                 )
                 await verifyContract(kind, chainId, receipt.contractAddress)
+                setSavedReceiptVerified(true)
                 await onVerified(receipt.contractAddress, tx); setReview(null)
               })}
             >
@@ -142,14 +154,18 @@ export function ContractDeployment({ kind, chainId, args, onVerified }: {
         </>
       )}
 
-      <details>
-        <summary className="small-note">Already deployed? Verify an address</summary>
+      <details open={!!savedReceipt && !savedReceiptVerified}>
+        <summary className="small-note">
+          {savedReceipt && !savedReceiptVerified
+            ? 'Saved receipt found — verify to re-confirm'
+            : 'Already deployed? Verify an address'}
+        </summary>
         <div className="flex flex-wrap gap-2 mt-2">
           <input
             aria-label={`${kind} address`}
             className="form-input flex-1"
             value={candidate}
-            onChange={e => setCandidate(e.target.value)}
+            onChange={e => { setCandidate(e.target.value); setSavedReceiptVerified(false) }}
             placeholder="0x…"
           />
           <button
@@ -157,20 +173,49 @@ export function ContractDeployment({ kind, chainId, args, onVerified }: {
             disabled={busy || !candidate}
             onClick={() => void run(async () => {
               const address = getAddress(candidate.trim())
-              await verifyContract(kind, chainId, address)
-              await onVerified(address)
+              // If a saved receipt exists and its address matches, also verify the tx receipt
+              // on chain before accepting: tx must be successful and contractAddress must match.
+              if (savedReceipt && savedReceipt.address.toLowerCase() === address.toLowerCase()) {
+                const client = rpc(chainId)
+                const receipt = await client.getTransactionReceipt({ hash: savedReceipt.hash })
+                if (!receipt || receipt.status !== 'success' || !receipt.contractAddress) {
+                  throw new Error('Saved deployment transaction is not confirmed successful on this chain.')
+                }
+                if (receipt.contractAddress.toLowerCase() !== address.toLowerCase()) {
+                  throw new Error('Saved transaction deployed a different address than the candidate. Clear and re-enter.')
+                }
+                await verifyContract(kind, chainId, address)
+                setSavedReceiptVerified(true)
+                await onVerified(address, savedReceipt.hash)
+              } else {
+                await verifyContract(kind, chainId, address)
+                await onVerified(address)
+              }
             })}
           >
             Verify &amp; use
           </button>
         </div>
+        {savedReceipt && !savedReceiptVerified && (
+          <p className="small-note mt-1" style={{ color: 'var(--warn)' }}>
+            Loaded from saved receipt — unverified until you click Verify &amp; use above.
+          </p>
+        )}
       </details>
 
       {busy && <p role="status" className="small-note">Checking the network…</p>}
       {hash && (
-        <a className="small-note" href={`${explorer(chainId)}/tx/${hash}`} target="_blank" rel="noreferrer">
-          View deployment transaction
-        </a>
+        <p className="small-note">
+          <a href={`${explorer(chainId)}/tx/${hash}`} target="_blank" rel="noreferrer">
+            View deployment transaction ↗
+          </a>
+          {!savedReceiptVerified && savedReceipt?.hash === hash && !busy && (
+            <span style={{ marginLeft: 8, color: 'var(--warn)' }}>(unverified — click Verify &amp; use to confirm)</span>
+          )}
+          {savedReceiptVerified && savedReceipt?.hash === hash && (
+            <span style={{ marginLeft: 8, color: 'var(--cobalt)' }}>(verified this session)</span>
+          )}
+        </p>
       )}
       {error && <p role="alert" className="notice text-sm">{error}</p>}
     </section>

@@ -46,8 +46,8 @@ TradeLab is a browser-based BTC/USDT strategy lab and USDC-powered software-lice
 | Field | Value | Status |
 |---|---|---|
 | Arc Studio project URL | `https://studio.arc.io/app/04fabf1d-e9e4-40c9-a737-ac53f55c43b1` | ✓ Available |
-| Live app URL | _PENDING — deploy to Netlify/HF/Vercel_ | ❌ Missing |
-| Mainnet contract address | _PENDING — deploy StrategyLicenseMarket on Arc mainnet_ | ❌ Missing |
+| Live app URL | `https://earnest-kleicha-68d9e5.netlify.app` | ⚠ Static only — functions pending Git build |
+| Mainnet contract address | `0xEB55Dca755E186C24Ee42cd1d3D315D3Cc602A4d` — deploy tx `0x364b873f903d473cf45d2b3342a14690a1be72533ca548235fdde71a92d69cf6` ([explorer](https://explorer.arc.io/tx/0x364b873f903d473cf45d2b3342a14690a1be72533ca548235fdde71a92d69cf6)) | ✓ Deployed — gas only, not a USDC license purchase |
 | Mainnet USDC purchase TX | _PENDING — verified buyer→seller Transfer + LicensePurchased event, amount > 0, buyer ≠ seller, chain 5042_ | ❌ Missing |
 | Public repo URL | `https://github.com/openai-lover/arc-tradelab` | ✓ Published (210 entries, commit ec9188f) |
 | Video (Arc Studio + mainnet tx) | _PENDING — record after mainnet deploy showing Studio tests and a live mainnet USDC purchase_ | ❌ Missing |

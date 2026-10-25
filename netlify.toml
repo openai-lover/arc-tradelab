@@ -4,13 +4,26 @@
 
 [build.environment]
   NODE_VERSION = "24"
+  PUBLIC_APP_ORIGIN = "https://earnest-kleicha-68d9e5.netlify.app"
 
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+
+# Function paths declared in evidence.mjs config export take priority over redirects.
+# SPA fallback for all other routes.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
 [[headers]]
   for = "/*"
   [headers.values]
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

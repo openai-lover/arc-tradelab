@@ -41,6 +41,9 @@ context/
 # ── Nested clone placed by Arc Studio GitHub integration ─────
 /arc-tradelab/
 
+# Netlify build cache and deploy state (created by Git-connected builds)
+.netlify/
+
 # ── OS / editor artefacts ────────────────────────────────────
 .DS_Store
 Thumbs.db

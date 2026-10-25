@@ -18,20 +18,6 @@ export interface LicenseMarketDeployment {
   readonly sourceSha256: Hash
 }
 
-// Addresses are untrusted candidates. Only an exact compiled runtime match (including
-// constructor-bound chain ID) can register one; every read/write rechecks that runtime.
-export let LICENSE_MARKET_DEPLOYMENTS: readonly LicenseMarketDeployment[] = Object.freeze([])
-export async function registerVerifiedMarket(chainId: LicenseMarketChainId, candidate: Address) {
-  const address = getAddress(candidate)
-  await verifyContract('StrategyLicenseMarket', chainId, address)
-  const deployment = validateLicenseDeployment({ key: `arc-${chainId}-${address.toLowerCase()}`,
-    label: `${chainId === 5042 ? 'Arc mainnet' : 'Arc Testnet'} · ${address.slice(0, 8)}`, chainId, address,
-    runtimeCodeHash: runtimeHash('StrategyLicenseMarket', chainId),
-    sourceSha256: artifact('StrategyLicenseMarket').sourceSha256 as Hash })
-  LICENSE_MARKET_DEPLOYMENTS = Object.freeze([...LICENSE_MARKET_DEPLOYMENTS.filter(d => d.key !== deployment.key), deployment])
-  return deployment
-}
-
 export const LICENSE_MARKET_ABI = parseAbi([
   'function expectedChainId() view returns (uint256)',
   'function USDC() view returns (address)',
@@ -169,6 +155,35 @@ export function validateLicenseDeployment(deployment: LicenseMarketDeployment): 
   assertLicenseHash(deployment.runtimeCodeHash, 'Reviewed runtime code hash')
   assertLicenseHash(deployment.sourceSha256, 'Reviewed source digest')
   return Object.freeze({ ...deployment, address })
+}
+
+// Declared here so ZERO_ADDRESS, ARC_USDC_ADDRESS, and validateLicenseDeployment are all
+// initialized before this runs. Do not move this block above those declarations.
+//
+// Verified 2026-10-25 via independent RPC check:
+//   expectedChainId() = 5042 ✓
+//   USDC()            = 0x3600000000000000000000000000000000000000 ✓
+//   USDC_DECIMALS()   = 6 ✓
+//   keccak256(eth_getCode) = 0x4a9ce64c7745f7e85a1915bfa0f378a3cde907e2949d0f3db0f06d502fd2af8c ✓
+export let LICENSE_MARKET_DEPLOYMENTS: readonly LicenseMarketDeployment[] = Object.freeze([
+  validateLicenseDeployment({
+    key: 'arc-5042-0xeb55dca755e186c24ee42cd1d3d315d3cc602a4d',
+    label: 'Arc mainnet · 0xEB55Dca7',
+    chainId: 5042,
+    address: '0xEB55Dca755E186C24Ee42cd1d3D315D3Cc602A4d',
+    runtimeCodeHash: '0x4a9ce64c7745f7e85a1915bfa0f378a3cde907e2949d0f3db0f06d502fd2af8c',
+    sourceSha256: '0x3a1e28fffddd5d5314fa407634d43cb29980fb1e53388c191d1d9c62c3f88baa',
+  }),
+])
+export async function registerVerifiedMarket(chainId: LicenseMarketChainId, candidate: Address) {
+  const address = getAddress(candidate)
+  await verifyContract('StrategyLicenseMarket', chainId, address)
+  const deployment = validateLicenseDeployment({ key: `arc-${chainId}-${address.toLowerCase()}`,
+    label: `${chainId === 5042 ? 'Arc mainnet' : 'Arc Testnet'} · ${address.slice(0, 8)}`, chainId, address,
+    runtimeCodeHash: runtimeHash('StrategyLicenseMarket', chainId),
+    sourceSha256: artifact('StrategyLicenseMarket').sourceSha256 as Hash })
+  LICENSE_MARKET_DEPLOYMENTS = Object.freeze([...LICENSE_MARKET_DEPLOYMENTS.filter(d => d.key !== deployment.key), deployment])
+  return deployment
 }
 
 export function requireLicenseDeployment(key?: string): LicenseMarketDeployment {

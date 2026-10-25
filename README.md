@@ -113,9 +113,9 @@ bunx vite build
 - [x] Public source repository: https://github.com/openai-lover/arc-tradelab
 - [x] Builder profile: https://github.com/openai-lover
 - [x] Arc Studio project: https://studio.arc.io/app/04fabf1d-e9e4-40c9-a737-ac53f55c43b1
-- [ ] StrategyLicenseMarket deployed on Arc mainnet (human wallet, MetaMask)
+- [x] StrategyLicenseMarket deployed on Arc mainnet: `0xEB55Dca755E186C24Ee42cd1d3D315D3Cc602A4d` — deploy tx [`0x364b873f…`](https://explorer.arc.io/tx/0x364b873f903d473cf45d2b3342a14690a1be72533ca548235fdde71a92d69cf6) (gas only, not a USDC license purchase; verified 2026-10-25)
 - [ ] Mainnet USDC purchase through the marketplace contract (verified buyer→seller Transfer + LicensePurchased event)
-- [ ] Live public URL (Netlify or Hugging Face)
+- [x] Live public URL: https://earnest-kleicha-68d9e5.netlify.app
 - [ ] 2-minute demo video showing Arc Studio and mainnet transaction
 
 **Gas estimate (observed 2026-10-25, Arc mainnet):** maximum budget ~0.034365 USDC for StrategyLicenseMarket deployment. Estimates change with network conditions; verify in the app before signing.

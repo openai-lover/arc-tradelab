@@ -39,21 +39,22 @@
       "id": "builder-profile",
       "description": "Public builder profile available",
       "detail": "https://github.com/openai-lover"
+    },
+    {
+      "id": "mainnet-deploy",
+      "description": "StrategyLicenseMarket deployed on Arc mainnet",
+      "address": "0xEB55Dca755E186C24Ee42cd1d3D315D3Cc602A4d",
+      "deployTx": "0x364b873f903d473cf45d2b3342a14690a1be72533ca548235fdde71a92d69cf6",
+      "deployTxNote": "Deployment gas cost only — this is NOT a USDC license purchase and does not satisfy the mainnet-usdc-tx requirement.",
+      "chainId": 5042,
+      "verifiedAt": "2026-10-25",
+      "verificationMethod": "Independent RPC check (Arc Studio): expectedChainId()=5042, USDC()=0x3600000000000000000000000000000000000000, USDC_DECIMALS()=6, keccak256(eth_getCode)=0x4a9ce64c...matches compiled artifact. Browser Verify & use confirmed saved receipt success + contractAddress match + runtime on 2026-10-25.",
+      "explorerUrl": "https://explorer.arc.io/address/0xEB55Dca755E186C24Ee42cd1d3D315D3Cc602A4d",
+      "deployTxExplorerUrl": "https://explorer.arc.io/tx/0x364b873f903d473cf45d2b3342a14690a1be72533ca548235fdde71a92d69cf6"
     }
   ],
 
   "requiredMissing": [
-    {
-      "id": "mainnet-deploy",
-      "description": "StrategyLicenseMarket deployed on Arc mainnet",
-      "blockedBy": "Human wallet action required. Contract is ready; human must sign the deployment in MetaMask on Arc mainnet (chain 5042).",
-      "impact": "Without this, no mainnet USDC transaction is possible.",
-      "gasEstimate": {
-        "observedMaxBudgetUsdc": "0.034365116",
-        "observedAt": "2026-10-25",
-        "warning": "Gas estimates vary with network conditions. Read the value the app displays at signing time."
-      }
-    },
     {
       "id": "mainnet-usdc-tx",
       "description": "Mainnet USDC transaction through the marketplace contract (judge requirement: 30% weight)",
@@ -62,9 +63,13 @@
     },
     {
       "id": "live-url",
-      "description": "Live public URL",
-      "blockedBy": "No Netlify/HF/Vercel account connected. Connect via the Integrations menu and deploy.",
-      "impact": "Required for submission. Also needed for PUBLIC_APP_ORIGIN to enable evidence uploads."
+      "description": "Live public URL with Netlify Functions (evidence API)",
+      "url": "https://earnest-kleicha-68d9e5.netlify.app",
+      "staticDeployedAt": "2026-10-25",
+      "functionsStatus": "NOT YET DEPLOYED — static-only upload was used; functions require a Git-connected Netlify build. PUBLIC_APP_ORIGIN=https://earnest-kleicha-68d9e5.netlify.app configured in Netlify UI (all scopes/contexts) 2026-10-25. GitHub→Netlify authorization pending.",
+      "verificationRequired": "GET /api/evidence/status must return {available:true, publicHosting:true, origin:'https://earnest-kleicha-68d9e5.netlify.app'} with HTTP 200 and content-type application/json before this item is complete.",
+      "blockedBy": "Trigger a Git-connected build from the Netlify dashboard. PUBLIC_APP_ORIGIN is now set in netlify.toml [build.environment].",
+      "impact": "App is browsable. Evidence uploads and /api/evidence/status require functions to be deployed via Git build."
     },
     {
       "id": "demo-video",
