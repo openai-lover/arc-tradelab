@@ -29,9 +29,9 @@ TradeLab is a browser-based BTC/USDT strategy lab and USDC-powered software-lice
 - Stable USDC-denominated gas makes deployment cost estimates readable in the same unit as the payment token.
 
 **Development:**
-- Frontend (Vite + React + TypeScript) and all onchain integration built in Arc Studio.
-- Contract sources initially drafted locally with Codex assistance, then integrated, reviewed, and tested in Arc Studio using Foundry.
-- Marketplace integration, evidence pipeline, purchase-proof verification, Netlify Blobs adapter, and 81-test review suite written and run in Arc Studio.
+- Frontend (Vite + React + TypeScript) developed in Arc Studio.
+- Contract sources and some marketplace/evidence/test components initially drafted locally with Codex, then integrated, reviewed, and refined in Arc Studio using Foundry.
+- Foundry contract tests (52), browser typecheck, and production build verified and run in Arc Studio.
 
 **Honest limitations:**
 - Strategy templates are public SMA settings. A software-use license does not make them exclusive or secret.
@@ -49,7 +49,7 @@ TradeLab is a browser-based BTC/USDT strategy lab and USDC-powered software-lice
 | Live app URL | _PENDING — deploy to Netlify/HF/Vercel_ | ❌ Missing |
 | Mainnet contract address | _PENDING — deploy StrategyLicenseMarket on Arc mainnet_ | ❌ Missing |
 | Mainnet USDC purchase TX | _PENDING — verified buyer→seller Transfer + LicensePurchased event, amount > 0, buyer ≠ seller, chain 5042_ | ❌ Missing |
-| Public repo URL | `https://github.com/openai-lover/arc-tradelab` — repo created, source push pending GitHub app authorization | ⚠ Repo empty |
+| Public repo URL | `https://github.com/openai-lover/arc-tradelab` | ✓ Published (210 entries, commit ec9188f) |
 | Video (Arc Studio + mainnet tx) | _PENDING — record after mainnet deploy showing Studio tests and a live mainnet USDC purchase_ | ❌ Missing |
 | Builder profile | `https://github.com/openai-lover` | ✓ Available |
 
@@ -68,7 +68,7 @@ These are Arc Testnet transactions using test USDC only. They demonstrate the va
 
 ## Ready manual license demo (0.01 USDC — review only, no signing until human confirms)
 
-This describes the flow once `StrategyLicenseMarket` is deployed on Arc mainnet. Wallet currently connected: MetaMask on Arc mainnet with ~2 USDC. No transaction is submitted without the human confirming each MetaMask prompt.
+This describes the flow once `StrategyLicenseMarket` is deployed on Arc mainnet. Use a funded Arc mainnet wallet. No transaction is submitted without the human confirming each MetaMask prompt.
 
 **Step 1 — Deploy the marketplace (one-time, owner wallet):**
 1. In TradeLab → Bot market → Marketplace setup → select Arc mainnet → "Activate bot marketplace".
@@ -99,11 +99,16 @@ This describes the flow once `StrategyLicenseMarket` is deployed on Arc mainnet.
 ## Arc Studio usage evidence
 
 - Arc Studio project: `https://studio.arc.io/app/04fabf1d-e9e4-40c9-a737-ac53f55c43b1`
-- All Solidity reviewed and edited in Arc Studio; Foundry tests run here: `bun run contracts:test` → 52/52 pass.
-- Frontend built in Arc Studio: `bunx vite build` succeeds.
-- Review tests: `node --test review-tests/*.test.mjs` → 81/81 pass.
-- Contract sources initially drafted locally with Codex; integrated, reviewed, and all tests run in Arc Studio.
+- Frontend developed in Arc Studio: `bunx vite build` succeeds; `tsc -p tsconfig.browser.json` clean.
+- Contract sources and some marketplace/evidence/test components initially drafted locally with Codex, then integrated and refined in Arc Studio.
+- Foundry contract tests run in Arc Studio: `bun run contracts:test` → 52/52 pass.
 - TestnetBotVault deployed and full onchain run executed locally 2026-10-23 via a disposable Node script (owner/session keys were memory-only, now gone). Browser MetaMask mainnet deployment is the next required human step.
+
+---
+
+## Gas estimate (observed, not guaranteed)
+
+Observed 2026-10-25 on Arc mainnet via `eth_estimateGas` before deployment: maximum budget **~0.034365 USDC** for `StrategyLicenseMarket` deployment. Gas estimates vary with network conditions. Always read the value the app displays at signing time; do not rely on this figure.
 
 ---
 
@@ -111,7 +116,7 @@ This describes the flow once `StrategyLicenseMarket` is deployed on Arc mainnet.
 
 1. Deploy `StrategyLicenseMarket` on Arc mainnet — human wallet action required.
 2. Complete one real USDC purchase (buyer ≠ seller, amount > 0) and record the verified receipt.
-3. Push codebase to a public GitHub repository.
+3. ~~Push codebase to a public GitHub repository.~~ **Done: https://github.com/openai-lover/arc-tradelab (commit ec9188f)**
 4. Deploy app to a live public URL (Netlify/HF/Vercel).
 5. Record a 2-minute video demonstrating Arc Studio (contract tests visible) and the mainnet USDC transaction.
-6. Create a public builder profile (GitHub, X, or Farcaster — not just DoraHacks).
+6. ~~Create a public builder profile.~~ **Done: https://github.com/openai-lover**

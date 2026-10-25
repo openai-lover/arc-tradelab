@@ -108,11 +108,14 @@ bunx vite build
 - No background worker. The app requires an open browser tab.
 - No independent security audit has been performed on the contracts.
 
-## Submission blockers (Arc Microgrants Round 2)
+## Submission status (Arc Microgrants Round 2)
 
+- [x] Public source repository: https://github.com/openai-lover/arc-tradelab
+- [x] Builder profile: https://github.com/openai-lover
+- [x] Arc Studio project: https://studio.arc.io/app/04fabf1d-e9e4-40c9-a737-ac53f55c43b1
 - [ ] StrategyLicenseMarket deployed on Arc mainnet (human wallet, MetaMask)
-- [ ] Mainnet USDC transaction through the marketplace contract
-- [ ] Public GitHub repository
+- [ ] Mainnet USDC purchase through the marketplace contract (verified buyer→seller Transfer + LicensePurchased event)
 - [ ] Live public URL (Netlify or Hugging Face)
 - [ ] 2-minute demo video showing Arc Studio and mainnet transaction
-- [ ] Public DoraHacks builder profile
+
+**Gas estimate (observed 2026-10-25, Arc mainnet):** maximum budget ~0.034365 USDC for StrategyLicenseMarket deployment. Estimates change with network conditions; verify in the app before signing.

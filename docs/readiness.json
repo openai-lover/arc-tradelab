@@ -18,7 +18,7 @@
     {
       "id": "testnet-deployment",
       "description": "Arc Testnet deployment with full onchain run",
-      "detail": "TestnetBotVault at 0x36920c4ddaee26ec039a653ec78520c4b27a64e3 on Arc Testnet (5042002). Buy tx 0xb99b…, sell tx 0xf35f…, close tx 0xa9b6…"
+      "detail": "TestnetBotVault at 0x36920c4ddaee26ec039a653ec78520c4b27a64e3 on Arc Testnet (5042002). Buy tx 0xb99b…, sell tx 0xf35f…, close tx 0xa9b6…. Test USDC only — not mainnet."
     },
     {
       "id": "verify-before-buy-flow",
@@ -29,6 +29,16 @@
       "id": "evidence-adapter",
       "description": "Netlify Blobs evidence persistence adapter",
       "detail": "server/blobEvidence.mjs + netlify/functions/evidence.mjs. CAS atomic nonce/quota. 7 unit tests pass. Not yet verified against live Netlify deployment."
+    },
+    {
+      "id": "public-repo",
+      "description": "Public GitHub repository published",
+      "detail": "https://github.com/openai-lover/arc-tradelab — 210 tree entries, commit ec9188f3414fc2c285ba850c534521e1c6671700. Pushed via Arc Studio GitHub integration 2026-10-25."
+    },
+    {
+      "id": "builder-profile",
+      "description": "Public builder profile available",
+      "detail": "https://github.com/openai-lover"
     }
   ],
 
@@ -36,20 +46,19 @@
     {
       "id": "mainnet-deploy",
       "description": "StrategyLicenseMarket deployed on Arc mainnet",
-      "blockedBy": "Human wallet action required. Contract is ready; human must sign the deployment in MetaMask on Arc mainnet.",
-      "impact": "Without this, no mainnet USDC transaction is possible."
+      "blockedBy": "Human wallet action required. Contract is ready; human must sign the deployment in MetaMask on Arc mainnet (chain 5042).",
+      "impact": "Without this, no mainnet USDC transaction is possible.",
+      "gasEstimate": {
+        "observedMaxBudgetUsdc": "0.034365116",
+        "observedAt": "2026-10-25",
+        "warning": "Gas estimates vary with network conditions. Read the value the app displays at signing time."
+      }
     },
     {
       "id": "mainnet-usdc-tx",
       "description": "Mainnet USDC transaction through the marketplace contract (judge requirement: 30% weight)",
-      "blockedBy": "Requires mainnet-deploy first, then a real USDC purchase through a listed strategy.",
+      "blockedBy": "Requires mainnet-deploy first, then a real USDC purchase (buyer ≠ seller, amount > 0) through a listed strategy. Must be independently verified via purchaseProof.ts pipeline.",
       "impact": "Highest-weighted criterion."
-    },
-    {
-      "id": "public-repo",
-      "description": "Public GitHub repository",
-      "blockedBy": "No GitHub account is connected in this Arc Studio session. Connect via the Integrations menu, then push.",
-      "impact": "Required for submission."
     },
     {
       "id": "live-url",
@@ -62,21 +71,10 @@
       "description": "2-minute video showing Arc Studio and mainnet transaction",
       "blockedBy": "Requires mainnet-deploy and mainnet-usdc-tx first. Script is at docs/demo-script.md.",
       "impact": "Required for submission."
-    },
-    {
-      "id": "builder-profile",
-      "description": "Public builder profile on DoraHacks",
-      "blockedBy": "Human action on dorahacks.io.",
-      "impact": "Required for submission."
     }
   ],
 
   "optionalMissing": [
-    {
-      "id": "brand-images",
-      "description": "Original brand images (tradelab-hero.webp, strategy-objects.webp)",
-      "detail": "Image slots prepared at public/brand/. Graceful SVG fallbacks render until images are installed."
-    },
     {
       "id": "netlify-evidence-live",
       "description": "Netlify evidence hosting verified with PUBLIC_APP_ORIGIN",
@@ -94,6 +92,6 @@
     "jsReviewTests": "81/81 pass",
     "browserTypecheck": "clean (0 errors)",
     "viteBuild": "succeeds",
-    "lastVerified": "2026-10-23"
+    "lastVerified": "2026-10-25"
   }
 }

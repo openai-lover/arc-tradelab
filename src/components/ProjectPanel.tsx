@@ -294,7 +294,7 @@ export function ProjectPanel() {
             { done: true,  text: 'Original brand images installed (tradelab-hero.webp, strategy-objects.webp)' },
             { done: marketDeployed,       text: 'StrategyLicenseMarket deployed on Arc mainnet (human wallet required)' },
             { done: mainnetPurchaseProven, text: 'Mainnet USDC purchase: verified buyer→seller Transfer + LicensePurchased event on Arc mainnet (chain 5042)' },
-            { done: false, text: 'Public GitHub repository: github.com/openai-lover/arc-tradelab — created, source push pending GitHub app authorization' },
+            { done: true,  text: 'Public GitHub repository: github.com/openai-lover/arc-tradelab — published 2026-10-25, commit ec9188f' },
             { done: false, text: 'Live public URL (Netlify/HF deployment; no account connected)' },
             { done: false, text: 'Video showing Arc Studio and mainnet transaction' },
             { done: true,  text: 'Public builder profile: github.com/openai-lover' },
