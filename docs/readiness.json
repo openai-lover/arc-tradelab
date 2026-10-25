@@ -1,0 +1,99 @@
+{
+  "project": "Arc TradeLab",
+  "round": "Arc Microgrants Round 2",
+  "asOf": "2026-10-25",
+  "note": "This manifest reflects the actual project state. Do not submit to the contest until all required items are complete.",
+
+  "completedItems": [
+    {
+      "id": "contracts-arc-studio",
+      "description": "Contracts written, reviewed and tested in Arc Studio",
+      "detail": "StrategyLicenseMarket.sol + TestnetBotVault.sol + ExperimentRegistry.sol; 52 Foundry tests pass (forge test)"
+    },
+    {
+      "id": "frontend-app",
+      "description": "Working public app built in Arc Studio",
+      "detail": "React + Vite + wagmi v2. Overview, lab (live/backtest/versions/testnet), marketplace, project pages. Typecheck clean, 81 JS tests pass, production build succeeds."
+    },
+    {
+      "id": "testnet-deployment",
+      "description": "Arc Testnet deployment with full onchain run",
+      "detail": "TestnetBotVault at 0x36920c4ddaee26ec039a653ec78520c4b27a64e3 on Arc Testnet (5042002). Buy tx 0xb99b…, sell tx 0xf35f…, close tx 0xa9b6…"
+    },
+    {
+      "id": "verify-before-buy-flow",
+      "description": "Hash-verified buy flow implemented",
+      "detail": "SHA-256 commitment check, receipt verification (USDC Transfer + LicensePurchased event + block hash + entitlement), exact-amount approval, self-purchase guard, duplicate check."
+    },
+    {
+      "id": "evidence-adapter",
+      "description": "Netlify Blobs evidence persistence adapter",
+      "detail": "server/blobEvidence.mjs + netlify/functions/evidence.mjs. CAS atomic nonce/quota. 7 unit tests pass. Not yet verified against live Netlify deployment."
+    }
+  ],
+
+  "requiredMissing": [
+    {
+      "id": "mainnet-deploy",
+      "description": "StrategyLicenseMarket deployed on Arc mainnet",
+      "blockedBy": "Human wallet action required. Contract is ready; human must sign the deployment in MetaMask on Arc mainnet.",
+      "impact": "Without this, no mainnet USDC transaction is possible."
+    },
+    {
+      "id": "mainnet-usdc-tx",
+      "description": "Mainnet USDC transaction through the marketplace contract (judge requirement: 30% weight)",
+      "blockedBy": "Requires mainnet-deploy first, then a real USDC purchase through a listed strategy.",
+      "impact": "Highest-weighted criterion."
+    },
+    {
+      "id": "public-repo",
+      "description": "Public GitHub repository",
+      "blockedBy": "No GitHub account is connected in this Arc Studio session. Connect via the Integrations menu, then push.",
+      "impact": "Required for submission."
+    },
+    {
+      "id": "live-url",
+      "description": "Live public URL",
+      "blockedBy": "No Netlify/HF/Vercel account connected. Connect via the Integrations menu and deploy.",
+      "impact": "Required for submission. Also needed for PUBLIC_APP_ORIGIN to enable evidence uploads."
+    },
+    {
+      "id": "demo-video",
+      "description": "2-minute video showing Arc Studio and mainnet transaction",
+      "blockedBy": "Requires mainnet-deploy and mainnet-usdc-tx first. Script is at docs/demo-script.md.",
+      "impact": "Required for submission."
+    },
+    {
+      "id": "builder-profile",
+      "description": "Public builder profile on DoraHacks",
+      "blockedBy": "Human action on dorahacks.io.",
+      "impact": "Required for submission."
+    }
+  ],
+
+  "optionalMissing": [
+    {
+      "id": "brand-images",
+      "description": "Original brand images (tradelab-hero.webp, strategy-objects.webp)",
+      "detail": "Image slots prepared at public/brand/. Graceful SVG fallbacks render until images are installed."
+    },
+    {
+      "id": "netlify-evidence-live",
+      "description": "Netlify evidence hosting verified with PUBLIC_APP_ORIGIN",
+      "detail": "Requires live Netlify deployment. Blobs adapter is implemented and unit-tested."
+    },
+    {
+      "id": "experiment-registry-deploy",
+      "description": "ExperimentRegistry deployed on Arc Testnet",
+      "detail": "Contract is ready; not a hackathon requirement."
+    }
+  ],
+
+  "testResults": {
+    "forgeTest": "52/52 pass",
+    "jsReviewTests": "81/81 pass",
+    "browserTypecheck": "clean (0 errors)",
+    "viteBuild": "succeeds",
+    "lastVerified": "2026-10-23"
+  }
+}

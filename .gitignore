@@ -1,0 +1,50 @@
+# ── Dependencies ────────────────────────────────────────────
+node_modules/
+.pnpm-store/
+.yarn/
+
+# ── Environment / secrets (NEVER publish) ───────────────────
+.env
+.env.*
+!.env.example
+.circle/
+recovery_file*
+*.pem
+*.key
+*.p12
+*.pfx
+
+# ── Build output ─────────────────────────────────────────────
+dist/
+build/
+
+# ── Foundry build artifacts ──────────────────────────────────
+contracts/out/
+contracts/cache/
+
+# ── Local tool directories ───────────────────────────────────
+contract-tools/
+evidence-data/
+
+# ── Runtime logs (sandbox-specific, not source) ─────────────
+console.jsonl
+traces.jsonl
+/tmp/
+
+# ── Local wallet / session data ──────────────────────────────
+*.wallet
+*.session
+
+# ── Arc Studio turn context (not project source) ─────────────
+context/
+
+# ── OS / editor artefacts ────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/settings.json
+
+# ── Bun ──────────────────────────────────────────────────────
+.bun/
