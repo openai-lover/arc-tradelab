@@ -271,10 +271,12 @@ export function ProjectPanel() {
             Onchain fill records confirm the order was submitted, not that the price was correct.
           </li>
           <li>
-            <strong>Evidence API not yet smoke-tested post-rename.</strong> The Netlify Blobs
-            evidence adapter is implemented and unit-tested. Git-connected build is active at{' '}
-            <code>arc-tradelab.netlify.app</code>; <code>/api/evidence/status</code> has not
-            been independently verified after the site rename.
+            <strong>Evidence upload durability not yet verified.</strong> The Netlify Blobs
+            evidence adapter is implemented and unit-tested (7 tests pass).{' '}
+            <code>GET /api/evidence/status</code> returns{' '}
+            <code>{"{"}"available":true,"publicHosting":true{"}"}</code> on{' '}
+            <code>arc-tradelab.netlify.app</code> (verified 2026-10-25). No signed evidence
+            upload or download round-trip has been performed yet.
           </li>
           {!marketDeployed && (
             <li>
@@ -303,7 +305,7 @@ export function ProjectPanel() {
             { done: true,  text: 'Live public URL: arc-tradelab.netlify.app (Git-connected build, Netlify Functions deployed 2026-10-25)' },
             { done: false, text: 'Video showing Arc Studio and mainnet transaction' },
             { done: true,  text: 'Public builder profile: github.com/openai-lover' },
-            { done: false, text: 'Evidence hosting verified on Netlify (PUBLIC_APP_ORIGIN required)' },
+            { done: true,  text: 'Evidence API active on Netlify: /api/evidence/status → available:true (verified 2026-10-25); upload durability not yet tested' },
           ].map(({ done, text }) => (
             <div className={`missing-item ${done ? 'missing-item-done' : ''}`} key={text}>
               <span className="missing-item-icon">{done ? '✓' : '○'}</span>

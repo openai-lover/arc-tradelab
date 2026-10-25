@@ -43,7 +43,7 @@ Netlify deployment adapter: netlify.toml and netlify/functions/evidence.mjs use 
 - Contracts: Solidity 0.8.28 + Foundry. Sources in `contracts/`, unit tests in `contracts/test/*.t.sol`. Build with `bun run contracts:build` (`forge build`), test with `bun run contracts:test` (`forge test`).
 - Wallet: injected (MetaMask, etc.)
 - Chains: Arc Testnet (5042002) and Arc mainnet (5042), imported from `viem/chains`; Ethereum mainnet only for ENS
-- Token: USDC (6 decimals) (Address: 0x3600000000000000000000000000000000000000, Chain: Arc Testnet)
+- Token: USDC (6 decimals) (Address: 0x3600000000000000000000000000000000000000, both Arc Testnet 5042002 and Arc mainnet 5042)
 - Toasts: Sonner
 
 ## Key Files
@@ -61,6 +61,7 @@ Current status (2026-10-25 end of day):
 - StrategyLicenseMarket deployed on Arc mainnet at 0xEB55Dca755E186C24Ee42cd1d3D315D3Cc602A4d (deploy tx 0x364b873f…69cf6; gas only, not a USDC purchase)
 - GitHub repo public at https://github.com/openai-lover/arc-tradelab (commit 32028a6, source pushed 2026-10-25)
 - PUBLIC_APP_ORIGIN=https://arc-tradelab.netlify.app in netlify.toml [build.environment]
+- Evidence API smoke-tested 2026-10-25: GET https://arc-tradelab.netlify.app/api/evidence/status → {available:true,publicHosting:true,origin:'https://arc-tradelab.netlify.app',maxBundleBytes:2097152}. Upload/readback durability (signed round-trip) not yet performed.
 - Mainnet USDC license purchase: NOT yet completed
 - CSS defect fixed: .starter-card-bottom button was overriding .btn-primary colour (blue-on-blue); fixed with explicit .btn-primary override rule
 

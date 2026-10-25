@@ -10,7 +10,7 @@ TradeLab
 
 ## Short description (≤ 280 characters)
 
-BTC strategy backtesting lab with a USDC software-license marketplace on Arc. Pick a free SMA template, run real Binance candles, recompute evidence, then buy the exact version you verified. Simulated trades only.
+BTC strategy backtesting lab with a USDC software-license marketplace on Arc. Pick a free SMA template, run real Binance candles, recompute evidence, then buy the exact version you verified — all hashes match or payment stays blocked. Simulated trades only.
 
 ## Longer description
 
@@ -46,11 +46,11 @@ TradeLab is a browser-based BTC/USDT strategy lab and USDC-powered software-lice
 | Field | Value | Status |
 |---|---|---|
 | Arc Studio project URL | `https://studio.arc.io/app/04fabf1d-e9e4-40c9-a737-ac53f55c43b1` | ✓ Available |
-| Live app URL | `https://arc-tradelab.netlify.app` | ✓ Git-connected build active; Netlify Functions deployed 2026-10-25 (build 1cd6b70) |
+| Live app URL | `https://arc-tradelab.netlify.app` | ✓ Git-connected build main@594e9d3 published 2026-10-25; Netlify Functions active; `GET /api/evidence/status` → `{available:true,publicHosting:true,origin:'https://arc-tradelab.netlify.app',maxBundleBytes:2097152}` (verified in public browser 2026-10-25) |
 | Mainnet contract address | `0xEB55Dca755E186C24Ee42cd1d3D315D3Cc602A4d` — deploy tx `0x364b873f903d473cf45d2b3342a14690a1be72533ca548235fdde71a92d69cf6` ([explorer](https://explorer.arc.io/tx/0x364b873f903d473cf45d2b3342a14690a1be72533ca548235fdde71a92d69cf6)) | ✓ Deployed — gas only, not a USDC license purchase |
 | Mainnet USDC purchase TX | _PENDING — verified buyer→seller Transfer + LicensePurchased event, amount > 0, buyer ≠ seller, chain 5042_ | ❌ Missing |
 | Public repo URL | `https://github.com/openai-lover/arc-tradelab` | ✓ Published (210 entries, commit ec9188f) |
-| Video (Arc Studio + mainnet tx) | _PENDING — record after mainnet deploy showing Studio tests and a live mainnet USDC purchase_ | ❌ Missing |
+| Video (Arc Studio + mainnet tx) | _PENDING — segment 0:00–1:10 (backtest + empty marketplace) recordable now; segment 1:10–1:55 (listing + purchase) requires mainnet USDC purchase first. See docs/demo-script.md._ | ❌ Missing |
 | Builder profile | `https://github.com/openai-lover` | ✓ Available |
 
 **Note on mainnet USDC transaction:** listing creation does not count. The requirement is a real buyer-to-seller USDC transfer confirmed on Arc mainnet (chain 5042), independently verifiable via the `purchaseProof.ts` verification pipeline (USDC Transfer log + LicensePurchased event + block hash + entitlement).

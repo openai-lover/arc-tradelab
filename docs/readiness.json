@@ -13,7 +13,7 @@
     {
       "id": "frontend-app",
       "description": "Working public app built in Arc Studio",
-      "detail": "React + Vite + wagmi v2. Overview, lab (live/backtest/versions/testnet), marketplace, project pages. Typecheck clean, 81 JS tests pass, production build succeeds."
+      "detail": "React + Vite + wagmi v2. Overview, lab (live/backtest/versions/testnet), marketplace, project pages. Typecheck clean, 89 JS tests pass, production build succeeds."
     },
     {
       "id": "testnet-deployment",
@@ -28,7 +28,7 @@
     {
       "id": "evidence-adapter",
       "description": "Netlify Blobs evidence persistence adapter",
-      "detail": "server/blobEvidence.mjs + netlify/functions/evidence.mjs. CAS atomic nonce/quota. 7 unit tests pass. Not yet verified against live Netlify deployment."
+      "detail": "server/blobEvidence.mjs + netlify/functions/evidence.mjs. CAS atomic nonce/quota. 7 unit tests pass. Endpoint smoke-tested 2026-10-25: GET https://arc-tradelab.netlify.app/api/evidence/status → {available:true,publicHosting:true,origin:'https://arc-tradelab.netlify.app',maxBundleBytes:2097152}. Upload/readback durability (signed evidence round-trip) not yet performed."
     },
     {
       "id": "public-repo",
@@ -39,6 +39,19 @@
       "id": "builder-profile",
       "description": "Public builder profile available",
       "detail": "https://github.com/openai-lover"
+    },
+    {
+      "id": "live-url",
+      "description": "Live public URL with Netlify Functions and evidence API active",
+      "url": "https://arc-tradelab.netlify.app",
+      "previousUrl": "https://earnest-kleicha-68d9e5.netlify.app",
+      "siteId": "e1567516-3f99-4422-ae43-b66f4703d7d8",
+      "gitConnectedBuildAt": "2026-10-25",
+      "netlifyBuildId": "1cd6b70",
+      "verifiedAt": "2026-10-25",
+      "verificationMethod": "GET https://arc-tradelab.netlify.app/api/evidence/status → HTTP 200, {available:true,publicHosting:true,origin:'https://arc-tradelab.netlify.app',maxBundleBytes:2097152}. Smoke-tested in real public browser 2026-10-25 after build 594e9d3.",
+      "uploadDurability": "NOT yet verified — no signed evidence upload/readback round-trip performed. Endpoint responds but persistence under real workload is unconfirmed.",
+      "detail": "PUBLIC_APP_ORIGIN=https://arc-tradelab.netlify.app set in netlify.toml [build.environment]. Git-connected build main@594e9d3 published 2026-10-25."
     },
     {
       "id": "mainnet-deploy",
@@ -61,31 +74,20 @@
       "blockedBy": "Requires mainnet-deploy first, then a real USDC purchase (buyer ≠ seller, amount > 0) through a listed strategy. Must be independently verified via purchaseProof.ts pipeline.",
       "impact": "Highest-weighted criterion."
     },
-    {
-      "id": "live-url",
-      "description": "Live public URL with Netlify Functions (evidence API)",
-      "url": "https://arc-tradelab.netlify.app",
-      "previousUrl": "https://earnest-kleicha-68d9e5.netlify.app",
-      "siteId": "e1567516-3f99-4422-ae43-b66f4703d7d8",
-      "gitConnectedBuildAt": "2026-10-25",
-      "netlifyBuildId": "1cd6b70",
-      "functionsStatus": "Git-connected build active (build 1cd6b70, 16:02 KST 2026-10-25). Netlify Functions deployed. PUBLIC_APP_ORIGIN=https://arc-tradelab.netlify.app set in netlify.toml [build.environment]. Site renamed from earnest-kleicha-68d9e5 to arc-tradelab.netlify.app.",
-      "verificationRequired": "GET /api/evidence/status should return {available:true, publicHosting:true, origin:'https://arc-tradelab.netlify.app'} with HTTP 200. Not yet independently smoke-tested post-rename.",
-      "impact": "App is browsable. Evidence uploads available via Netlify Functions."
-    },
+
     {
       "id": "demo-video",
-      "description": "2-minute video showing Arc Studio and mainnet transaction",
-      "blockedBy": "Requires mainnet-deploy and mainnet-usdc-tx first. Script is at docs/demo-script.md.",
+      "description": "2-minute video showing Arc Studio and mainnet USDC transaction",
+      "blockedBy": "Segment 0:00–1:10 (backtest + empty marketplace) can be recorded now. Segment 1:10–1:55 (listing creation + purchase) requires mainnet-usdc-tx first. Script at docs/demo-script.md.",
       "impact": "Required for submission."
     }
   ],
 
   "optionalMissing": [
     {
-      "id": "netlify-evidence-live",
-      "description": "Netlify evidence hosting verified with PUBLIC_APP_ORIGIN",
-      "detail": "Requires live Netlify deployment. Blobs adapter is implemented and unit-tested."
+      "id": "netlify-evidence-durability",
+      "description": "End-to-end evidence upload/readback durability not yet verified",
+      "detail": "Endpoint /api/evidence/status returns available:true. No signed upload or download round-trip has been performed against the live Netlify Blobs store. Durability under real workload is unconfirmed."
     },
     {
       "id": "experiment-registry-deploy",
