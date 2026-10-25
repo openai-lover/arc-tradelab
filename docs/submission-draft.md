@@ -46,7 +46,7 @@ TradeLab is a browser-based BTC/USDT strategy lab and USDC-powered software-lice
 | Field | Value | Status |
 |---|---|---|
 | Arc Studio project URL | `https://studio.arc.io/app/04fabf1d-e9e4-40c9-a737-ac53f55c43b1` | ✓ Available |
-| Live app URL | `https://earnest-kleicha-68d9e5.netlify.app` | ⚠ Static only — functions pending Git build |
+| Live app URL | `https://arc-tradelab.netlify.app` | ✓ Git-connected build active; Netlify Functions deployed 2026-10-25 (build 1cd6b70) |
 | Mainnet contract address | `0xEB55Dca755E186C24Ee42cd1d3D315D3Cc602A4d` — deploy tx `0x364b873f903d473cf45d2b3342a14690a1be72533ca548235fdde71a92d69cf6` ([explorer](https://explorer.arc.io/tx/0x364b873f903d473cf45d2b3342a14690a1be72533ca548235fdde71a92d69cf6)) | ✓ Deployed — gas only, not a USDC license purchase |
 | Mainnet USDC purchase TX | _PENDING — verified buyer→seller Transfer + LicensePurchased event, amount > 0, buyer ≠ seller, chain 5042_ | ❌ Missing |
 | Public repo URL | `https://github.com/openai-lover/arc-tradelab` | ✓ Published (210 entries, commit ec9188f) |
@@ -114,9 +114,9 @@ Observed 2026-10-25 on Arc mainnet via `eth_estimateGas` before deployment: maxi
 
 ## Submission blockers (do not submit until resolved)
 
-1. Deploy `StrategyLicenseMarket` on Arc mainnet — human wallet action required.
+1. ~~Deploy `StrategyLicenseMarket` on Arc mainnet.~~ **Done: `0xEB55Dca755E186C24Ee42cd1d3D315D3Cc602A4d` — deploy tx `0x364b873f…69cf6`, block 27,745,471. Receipt: status=success, gasUsed=978,570. nextListingId=1 (0 listings). 0 ListingCreated / 0 LicensePurchased events as of block 27,756,306 (2026-10-25).**
 2. Complete one real USDC purchase (buyer ≠ seller, amount > 0) and record the verified receipt.
-3. ~~Push codebase to a public GitHub repository.~~ **Done: https://github.com/openai-lover/arc-tradelab (commit ec9188f)**
-4. Deploy app to a live public URL (Netlify/HF/Vercel).
+3. ~~Push codebase to a public GitHub repository.~~ **Done: https://github.com/openai-lover/arc-tradelab (commit 32028a6)**
+4. ~~Deploy app to a live public URL.~~ **Done: https://arc-tradelab.netlify.app (Git-connected build 1cd6b70, 2026-10-25)**
 5. Record a 2-minute video demonstrating Arc Studio (contract tests visible) and the mainnet USDC transaction.
 6. ~~Create a public builder profile.~~ **Done: https://github.com/openai-lover**

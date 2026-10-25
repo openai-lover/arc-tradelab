@@ -238,7 +238,7 @@ export function ProjectPanel() {
           <CodeBlock label="Build contracts" code="bun run contracts:build   # forge build" />
           <CodeBlock label="Test contracts (52 tests)" code="bun run contracts:test    # forge test" />
           <CodeBlock label="Browser typecheck" code="node node_modules/typescript/bin/tsc --noEmit -p tsconfig.browser.json" />
-          <CodeBlock label="JS review tests (81 tests)" code="node --test review-tests/*.test.mjs" />
+          <CodeBlock label="JS review tests (89 tests)" code="node --test review-tests/*.test.mjs" />
           <CodeBlock label="Production build" code="bunx vite build" />
         </div>
         <p className="small-note mt-4">
@@ -271,10 +271,10 @@ export function ProjectPanel() {
             Onchain fill records confirm the order was submitted, not that the price was correct.
           </li>
           <li>
-            <strong>Evidence hosting not yet live.</strong> The Netlify Blobs evidence adapter
-            is implemented and unit-tested, but a Netlify deployment with{' '}
-            <code>PUBLIC_APP_ORIGIN</code> set has not been verified. Evidence bundles can be
-            downloaded and shared manually in the interim.
+            <strong>Evidence API not yet smoke-tested post-rename.</strong> The Netlify Blobs
+            evidence adapter is implemented and unit-tested. Git-connected build is active at{' '}
+            <code>arc-tradelab.netlify.app</code>; <code>/api/evidence/status</code> has not
+            been independently verified after the site rename.
           </li>
           {!marketDeployed && (
             <li>
@@ -300,7 +300,7 @@ export function ProjectPanel() {
             { done: marketDeployed,       text: 'StrategyLicenseMarket deployed on Arc mainnet — 0xEB55Dca755E186C24Ee42cd1d3D315D3Cc602A4d (verified 2026-10-25)' },
             { done: mainnetPurchaseProven, text: 'Mainnet USDC purchase: verified buyer→seller Transfer + LicensePurchased event on Arc mainnet (chain 5042)' },
             { done: true,  text: 'Public GitHub repository: github.com/openai-lover/arc-tradelab — published 2026-10-25, commit ec9188f' },
-            { done: true,  text: 'Live public URL: earnest-kleicha-68d9e5.netlify.app' },
+            { done: true,  text: 'Live public URL: arc-tradelab.netlify.app (Git-connected build, Netlify Functions deployed 2026-10-25)' },
             { done: false, text: 'Video showing Arc Studio and mainnet transaction' },
             { done: true,  text: 'Public builder profile: github.com/openai-lover' },
             { done: false, text: 'Evidence hosting verified on Netlify (PUBLIC_APP_ORIGIN required)' },

@@ -64,12 +64,14 @@
     {
       "id": "live-url",
       "description": "Live public URL with Netlify Functions (evidence API)",
-      "url": "https://earnest-kleicha-68d9e5.netlify.app",
-      "staticDeployedAt": "2026-10-25",
-      "functionsStatus": "NOT YET DEPLOYED — static-only upload was used; functions require a Git-connected Netlify build. PUBLIC_APP_ORIGIN=https://earnest-kleicha-68d9e5.netlify.app configured in Netlify UI (all scopes/contexts) 2026-10-25. GitHub→Netlify authorization pending.",
-      "verificationRequired": "GET /api/evidence/status must return {available:true, publicHosting:true, origin:'https://earnest-kleicha-68d9e5.netlify.app'} with HTTP 200 and content-type application/json before this item is complete.",
-      "blockedBy": "Trigger a Git-connected build from the Netlify dashboard. PUBLIC_APP_ORIGIN is now set in netlify.toml [build.environment].",
-      "impact": "App is browsable. Evidence uploads and /api/evidence/status require functions to be deployed via Git build."
+      "url": "https://arc-tradelab.netlify.app",
+      "previousUrl": "https://earnest-kleicha-68d9e5.netlify.app",
+      "siteId": "e1567516-3f99-4422-ae43-b66f4703d7d8",
+      "gitConnectedBuildAt": "2026-10-25",
+      "netlifyBuildId": "1cd6b70",
+      "functionsStatus": "Git-connected build active (build 1cd6b70, 16:02 KST 2026-10-25). Netlify Functions deployed. PUBLIC_APP_ORIGIN=https://arc-tradelab.netlify.app set in netlify.toml [build.environment]. Site renamed from earnest-kleicha-68d9e5 to arc-tradelab.netlify.app.",
+      "verificationRequired": "GET /api/evidence/status should return {available:true, publicHosting:true, origin:'https://arc-tradelab.netlify.app'} with HTTP 200. Not yet independently smoke-tested post-rename.",
+      "impact": "App is browsable. Evidence uploads available via Netlify Functions."
     },
     {
       "id": "demo-video",
@@ -94,7 +96,7 @@
 
   "testResults": {
     "forgeTest": "52/52 pass",
-    "jsReviewTests": "81/81 pass",
+    "jsReviewTests": "89/89 pass",
     "browserTypecheck": "clean (0 errors)",
     "viteBuild": "succeeds",
     "lastVerified": "2026-10-25"

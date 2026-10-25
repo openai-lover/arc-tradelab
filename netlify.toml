@@ -4,7 +4,7 @@
 
 [build.environment]
   NODE_VERSION = "24"
-  PUBLIC_APP_ORIGIN = "https://earnest-kleicha-68d9e5.netlify.app"
+  PUBLIC_APP_ORIGIN = "https://arc-tradelab.netlify.app"
 
 [functions]
   directory = "netlify/functions"

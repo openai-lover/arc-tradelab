@@ -70,7 +70,7 @@ node node_modules/typescript/bin/tsc --noEmit -p tsconfig.browser.json
 ### JS review tests
 
 ```bash
-node --test review-tests/*.test.mjs   # 81 tests
+node --test review-tests/*.test.mjs   # 89 tests
 ```
 
 ### Production build
@@ -94,7 +94,7 @@ bunx vite build
 | Contract | Chain | Address | Status |
 |---|---|---|---|
 | TestnetBotVault | Arc Testnet (5042002) | `0x36920c4ddaee26ec039a653ec78520c4b27a64e3` | Deployed; full run completed 2026-10-23 |
-| StrategyLicenseMarket | Arc mainnet (5042) | — | Not yet deployed — requires human wallet |
+| StrategyLicenseMarket | Arc mainnet (5042) | `0xEB55Dca755E186C24Ee42cd1d3D315D3Cc602A4d` | Deployed 2026-10-25 — deploy tx [`0x364b873f…`](https://explorer.arc.io/tx/0x364b873f903d473cf45d2b3342a14690a1be72533ca548235fdde71a92d69cf6) (gas only; 0 listings, 0 purchases as of 2026-10-25) |
 | StrategyLicenseMarket | Arc Testnet (5042002) | — | Not yet deployed |
 | ExperimentRegistry | Arc Testnet (5042002) | — | Developed, not yet deployed |
 
@@ -104,7 +104,7 @@ bunx vite build
 - A software-use entitlement does not make public settings exclusive or prove authorship.
 - Historical returns are simulations under stated fee and slippage assumptions. Not a forecast.
 - Live Arc Testnet fills use client-reported BTC prices from Binance public APIs, not an onchain oracle.
-- Evidence hosting (Netlify Blobs) is implemented and tested but not verified against a live deployment.
+- Evidence hosting (Netlify Blobs) is implemented and tested. Git-connected Netlify build is active; `/api/evidence/status` should be reachable but has not been independently smoke-tested post-rename.
 - No background worker. The app requires an open browser tab.
 - No independent security audit has been performed on the contracts.
 
@@ -115,7 +115,7 @@ bunx vite build
 - [x] Arc Studio project: https://studio.arc.io/app/04fabf1d-e9e4-40c9-a737-ac53f55c43b1
 - [x] StrategyLicenseMarket deployed on Arc mainnet: `0xEB55Dca755E186C24Ee42cd1d3D315D3Cc602A4d` — deploy tx [`0x364b873f…`](https://explorer.arc.io/tx/0x364b873f903d473cf45d2b3342a14690a1be72533ca548235fdde71a92d69cf6) (gas only, not a USDC license purchase; verified 2026-10-25)
 - [ ] Mainnet USDC purchase through the marketplace contract (verified buyer→seller Transfer + LicensePurchased event)
-- [x] Live public URL: https://earnest-kleicha-68d9e5.netlify.app
+- [x] Live public URL: https://arc-tradelab.netlify.app (Git-connected build active; Netlify Functions deployed 2026-10-25)
 - [ ] 2-minute demo video showing Arc Studio and mainnet transaction
 
 **Gas estimate (observed 2026-10-25, Arc mainnet):** maximum budget ~0.034365 USDC for StrategyLicenseMarket deployment. Estimates change with network conditions; verify in the app before signing.
