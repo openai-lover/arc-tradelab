@@ -38,6 +38,9 @@ traces.jsonl
 # ── Arc Studio turn context (not project source) ─────────────
 context/
 
+# ── Nested clone placed by Arc Studio GitHub integration ─────
+/arc-tradelab/
+
 # ── OS / editor artefacts ────────────────────────────────────
 .DS_Store
 Thumbs.db
